@@ -8,7 +8,7 @@ class SceneMain extends Phaser.Scene {
     preload() {
         this.load.atlas("ninja", "images/ninja.png", "images/ninja.json");
         //let's take a look at this for ideas for animating the wuzz wuzz
-        this.load.image('sky', 'images/sky.png');//from wuzz game
+        //this.load.image('sky', 'images/sky.png');//from wuzz game
         this.load.image("brown", "images/tiles/brickBrown.png");
         this.load.image("grey", "images/tiles/brickGrey.png");
         this.load.image("cross", "images/controls/cross.png");
@@ -23,10 +23,13 @@ class SceneMain extends Phaser.Scene {
         this.load.spritesheet('mushrom', 'images/dude.png', { frameWidth: 32, frameHeight: 48 });
     }
     create() {
+        let bg = this.add.image(0,0,"background").setOrigin(0,0);
+        Align.scaleToGameW(bg,2);
+
         this.emitter=EventDispatcher.getInstance();
 
         //  A simple background for our game
-        this.add.image(400, 300, 'sky');
+        //this.add.image(400, 300, 'sky');
         this.brickGroup = this.physics.add.group();
         this.coinGroup = this.physics.add.group();
         this.ladderGroup = this.physics.add.group();
@@ -47,12 +50,21 @@ class SceneMain extends Phaser.Scene {
             rows: 11,
             cols: 11
         });
-        this.aGrid.showNumbers();
+        //this.aGrid.showNumbers();
+
+        this.blockGrid = new AlignGrid({
+            scene: this,
+            rows: 22,
+            cols: 22,
+            height:bg.displayHeight,
+            width:bg.displayWidth
+        });
+        this.blockGrid.showNumbers();
         
 
         this.ninja.setGravityY(200);
         //set up platforms
-        this.makeFloor(88, 98, "brown");
+        this.makeFloor(220, 240, "brown");
         this.makeFloor(62, 65, "brown");
         this.makeFloor(55, 57, "brown");
         //this.makeFloor(22, 29, "brown");
@@ -67,6 +79,19 @@ class SceneMain extends Phaser.Scene {
         });
         this.aGrid.placeAtIndex(88, this.gamePad);
         this.setListeners();
+        this.cameras.main.setBounds(0,0,bg.displayWidth,bg.displayHeight);
+        this.cameras.main.startFollow(this.ninja);
+
+        this.time.addEvent({
+            delay:1000,
+            callback: this.delayDone,
+            callbackScope: this,
+            loop: false
+        })
+    }
+    delayDone()
+    {
+        this.ninja.body.setSize(this.ninja.width,this.ninja.height, true);
     }
     setListeners()
     {
@@ -84,10 +109,12 @@ class SceneMain extends Phaser.Scene {
             case "GO_LEFT":
                 this.ninja.setVelocityX(-200);
                 this.ninja.anims.play('run');
+                ninja.flipX = true;
                 break;
             case "GO_RIGHT":
                 this.ninja.setVelocityX(200);
                 this.ninja.anims.play('run');
+                ninja.flipX = false;
                 break;
             case "BTN1":
                 this.ninja.setVelocityY(-200);
@@ -159,7 +186,8 @@ class SceneMain extends Phaser.Scene {
     }
     placeBlock(pos, key) {
         let block = this.physics.add.sprite(0, 0, key);
-        this.aGrid.placeAtIndex(pos, block);
+        //this.aGrid.placeAtIndex(pos, block);
+        this.blockGrid.placeAtIndex(pos, block);
         this.brickGroup.add(block);
         block.setImmovable();
         Align.scaleToGameW(block, .1);
