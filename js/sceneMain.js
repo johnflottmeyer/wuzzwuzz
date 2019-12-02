@@ -6,7 +6,7 @@ class SceneMain extends Phaser.Scene {
         super('SceneMain');
     }
     preload() {
-        this.load.atlas("ninja", "images/ninja.png", "images/ninja.json");
+        //this.load.atlas("ninja", "images/ninja.png", "images/ninja.json");
         //let's take a look at this for ideas for animating the wuzz wuzz
         this.load.image('sky', 'images/sky.png');//from wuzz game
         this.load.image("brown", "images/tiles/brickBrown.png");
@@ -31,18 +31,18 @@ class SceneMain extends Phaser.Scene {
 
         this.brickGroup = this.physics.add.group();
         this.coinGroup = this.physics.add.group();
-        this.ladderGroup = this.physics.add.group();
-        this.ninja = this.physics.add.sprite(200, -100, "ninja");
-       // this.ninja.setCollideWorldBounds(true);
-        //this.ninja = this.physics.add.sprite(200, -100, "dude");
-        Align.scaleToGameW(this.ninja, .2);
+        this.ladderGroup = this.physics.add.group();;
+        
+        this.dude = this.physics.add.sprite(200, -100, "dude");
+        this.dude.setCollideWorldBounds(true);
+        Align.scaleToGameW(this.dude, .1);
         //
         //
-        var frameNames = this.textures.get('ninja').getFrameNames();
+        var frameNames = this.textures.get('dude').getFrameNames();
         console.log(frameNames);
         this.makeAnims();
-        this.ninja.play("idle");
-        window.ninja = this.ninja;
+        //this.ninja.play("idle");
+        window.dude = this.dude;
         this.aGrid = new AlignGrid({
             scene: this,
             rows: 11,
@@ -60,7 +60,7 @@ class SceneMain extends Phaser.Scene {
         //this.blockGrid.showNumbers();
         
 
-        this.ninja.setGravityY(200);
+        this.dude.setGravityY(200);
         //set up platforms
         this.makeFloor(220, 241, "brown");
         this.makeFloor(110, 114, "brown");
@@ -69,8 +69,8 @@ class SceneMain extends Phaser.Scene {
        
         // window.scene=this;
         // 
-        this.ninja.setDepth(10000);
-        this.physics.add.collider(this.ninja, this.brickGroup);
+        this.dude.setDepth(10000);
+        this.physics.add.collider(this.dude, this.brickGroup);
         this.gamePad = new GamePad({
             scene: this,
             grid: this.aGrid
@@ -79,7 +79,7 @@ class SceneMain extends Phaser.Scene {
         this.aGrid.placeAtIndex(88, this.gamePad);
         this.setListeners();
         this.cameras.main.setBounds(0,0,bg.displayWidth,bg.displayHeight);
-        this.cameras.main.startFollow(this.ninja);
+        this.cameras.main.startFollow(this.dude);
 
         this.time.addEvent({
             delay:1000,
@@ -90,12 +90,12 @@ class SceneMain extends Phaser.Scene {
     }
     delayDone()
     {
-        this.ninja.body.setSize(this.ninja.width,this.ninja.height, true);
+        this.dude.body.setSize(this.dude.width,this.dude.height, true);
     }
     setListeners()
     {
         this.emitter.on('CONTROL_PRESSED',this.controlPressed.bind(this));
-        this.input.on('pointerup',this.stopNinja.bind(this));
+        this.input.on('pointerup',this.stopDude.bind(this));
     }
     controlPressed(param)
     {
@@ -106,59 +106,30 @@ class SceneMain extends Phaser.Scene {
             case "GO_DOWN":
                 break;
             case "GO_LEFT":
-                this.ninja.setVelocityX(-200);
-                this.ninja.anims.play('run');
-                ninja.flipX = true;
+                //dude.flipX = true;
+                this.dude.setVelocityX(-200);
+                this.dude.anims.play('left');
+                
                 break;
             case "GO_RIGHT":
-                this.ninja.setVelocityX(200);
-                this.ninja.anims.play('run');
-                ninja.flipX = false;
+                //dude.flipX = false;
+                this.dude.setVelocityX(200);
+                this.dude.anims.play('right');
+                
                 break;
             case "BTN1":
-                this.ninja.setVelocityY(-270);
+                this.dude.setVelocityY(-270);
                 break;
             case "BTN2":
                 this.scene.start('SceneOver');
                 break;
         }
     }
-    stopNinja() {
-        this.ninja.setVelocityX(0);
-        this.ninja.anims.play("idle");
+    stopDude() {
+        this.dude.setVelocityX(0);
+        this.dude.anims.play("idle");
     }
-    /*controllPressed(param) {
-        switch (param) {
-            case "GO_UP":
-                this.onLadder = this.checkOnLadder();
-                console.log(this.onLadder);
-                if (this.onLadder == true) {
-                    this.ninja.body.setCheckCollisionY(false);
-                    this.ninja.setVelocityY(-250);
-                }
-                break;
-            case "GO_DOWN":
-                break;
-            case "GO_LEFT":
-                this.ninja.setVelocityX(-200);
-                this.ninja.anims.play("run");
-                ninja.flipX = true;
-                console.log("flipX");
-                break;
-            case "GO_RIGHT":
-                this.ninja.setVelocityX(200);
-                this.ninja.anims.play("run");
-                ninja.flipX = false;
-                break;
-            case "BTN1":
-                this.ninja.setVelocityY(-200);
-                this.ninja.anims.play("jump");
-                break;
-            case "BTN2":
-                this.scene.start('SceneOver');
-                break;
-        }
-    }*/
+    
     checkOnLadder() {
         let onLadder = false;
         this.ladderGroup.children.iterate(function(child) {
@@ -175,8 +146,8 @@ class SceneMain extends Phaser.Scene {
         return onLadder;
     }
     checkLadder(ladder) {
-        let distX = Math.abs(this.ninja.x - ladder.x);
-        let distY = Math.abs(this.ninja.y - ladder.y);
+        let distX = Math.abs(this.dude.x - ladder.x);
+        let distY = Math.abs(this.dude.y - ladder.y);
         console.log(distX);
         console.log(distY);
         if (distX < 10 && distY < 25) {
@@ -198,7 +169,7 @@ class SceneMain extends Phaser.Scene {
         }
     }
     makeAnims() {
-        this.anims.create({
+       /* this.anims.create({
             key: 'attack',
             frames: this.makeAnim('ninja', 'Attack__00'),
             frameRate: 8,
@@ -245,6 +216,30 @@ class SceneMain extends Phaser.Scene {
             frames: this.makeAnim('ninja', "Run__00"),
             frameRate: 8,
             repeat: -1
+        });*/
+        this.anims.create({
+            key: 'left',
+            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+    
+        this.anims.create({
+            key: 'turn',
+            frames: [ { key: 'dude', frame: 4 } ],
+            frameRate: 20
+        });
+    
+        this.anims.create({
+            key: 'right',
+            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'idle',
+            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 5 }),
+            frameRate: 10,
         });
     }
     makeAnim(key, frameName) {
