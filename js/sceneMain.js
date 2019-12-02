@@ -8,7 +8,7 @@ class SceneMain extends Phaser.Scene {
     preload() {
         this.load.atlas("ninja", "images/ninja.png", "images/ninja.json");
         //let's take a look at this for ideas for animating the wuzz wuzz
-        //this.load.image('sky', 'images/sky.png');//from wuzz game
+        this.load.image('sky', 'images/sky.png');//from wuzz game
         this.load.image("brown", "images/tiles/brickBrown.png");
         this.load.image("grey", "images/tiles/brickGrey.png");
         this.load.image("cross", "images/controls/cross.png");
@@ -17,27 +17,25 @@ class SceneMain extends Phaser.Scene {
         this.load.image("controlBack", "images/controls/controlBack.png");
         this.load.image("background", "images/background.png");
         //from wuzz wuzz game
-        this.load.image('ground', 'images/platform.png');
-        this.load.image('star', 'images/fruityuity.png');
+        //this.load.image('ground', 'images/platform.png');
+        //this.load.image('star', 'images/fruityuity.png');
         this.load.spritesheet('dude', 'images/wuzzwuzz.png', { frameWidth: 32, frameHeight: 48 });
-        this.load.spritesheet('mushrom', 'images/dude.png', { frameWidth: 32, frameHeight: 48 });
+        //this.load.spritesheet('mushrom', 'images/dude.png', { frameWidth: 32, frameHeight: 48 });
     }
     create() {
-        let bg = this.add.image(0,0,"background").setOrigin(0,0);
+        //let bg = this.add.image(0,0,"background").setOrigin(0,0);
+        let bg = this.add.image(0,0,"sky").setOrigin(0,0);
         Align.scaleToGameW(bg,2);
 
         this.emitter=EventDispatcher.getInstance();
 
-        //  A simple background for our game
-        //this.add.image(400, 300, 'sky');
         this.brickGroup = this.physics.add.group();
         this.coinGroup = this.physics.add.group();
         this.ladderGroup = this.physics.add.group();
         this.ninja = this.physics.add.sprite(200, -100, "ninja");
+       // this.ninja.setCollideWorldBounds(true);
+        //this.ninja = this.physics.add.sprite(200, -100, "dude");
         Align.scaleToGameW(this.ninja, .2);
-        //
-        //
-        //
         //
         //
         var frameNames = this.textures.get('ninja').getFrameNames();
@@ -59,13 +57,13 @@ class SceneMain extends Phaser.Scene {
             height:bg.displayHeight,
             width:bg.displayWidth
         });
-        this.blockGrid.showNumbers();
+        //this.blockGrid.showNumbers();
         
 
         this.ninja.setGravityY(200);
         //set up platforms
-        this.makeFloor(220, 240, "brown");
-        this.makeFloor(62, 65, "brown");
+        this.makeFloor(220, 241, "brown");
+        this.makeFloor(110, 114, "brown");
         this.makeFloor(55, 57, "brown");
         //this.makeFloor(22, 29, "brown");
        
@@ -77,6 +75,7 @@ class SceneMain extends Phaser.Scene {
             scene: this,
             grid: this.aGrid
         });
+
         this.aGrid.placeAtIndex(88, this.gamePad);
         this.setListeners();
         this.cameras.main.setBounds(0,0,bg.displayWidth,bg.displayHeight);
@@ -117,18 +116,18 @@ class SceneMain extends Phaser.Scene {
                 ninja.flipX = false;
                 break;
             case "BTN1":
-                this.ninja.setVelocityY(-200);
+                this.ninja.setVelocityY(-270);
                 break;
             case "BTN2":
+                this.scene.start('SceneOver');
                 break;
-                //this.ninja.setVelocityY(-200);
         }
     }
     stopNinja() {
         this.ninja.setVelocityX(0);
         this.ninja.anims.play("idle");
     }
-    controllPressed(param) {
+    /*controllPressed(param) {
         switch (param) {
             case "GO_UP":
                 this.onLadder = this.checkOnLadder();
@@ -156,9 +155,10 @@ class SceneMain extends Phaser.Scene {
                 this.ninja.anims.play("jump");
                 break;
             case "BTN2":
+                this.scene.start('SceneOver');
                 break;
         }
-    }
+    }*/
     checkOnLadder() {
         let onLadder = false;
         this.ladderGroup.children.iterate(function(child) {

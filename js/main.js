@@ -18,11 +18,11 @@ window.onload = function() {
         width: w,
         height: h,
         parent: 'phaser-game',
-        scene: [SceneMain],
+        scene: [SceneMain,SceneOver],
         physics: {
             default: 'arcade',
             arcade: {
-                debug: true
+                debug: false
             }
         }
     };
