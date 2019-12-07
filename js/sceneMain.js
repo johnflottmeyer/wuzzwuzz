@@ -6,6 +6,57 @@ class SceneMain extends Phaser.Scene {
         super('SceneMain');
     }
     preload() {
+	
+	/*----------Loading Bar-----------*/
+    var progressBar = this.add.graphics();
+    var progressBox = this.add.graphics();
+        progressBox.fillStyle(0x222222, 0.8);
+        progressBox.fillRect(860, 370, 320, 50);
+        
+    var width = this.cameras.main.width;
+    var height = this.cameras.main.height;
+    var loadingText = this.make.text({
+        x: width / 2,
+        y: height / 2 - 50,
+        text: 'Loading...',
+        style: {
+            font: '20px monospace',
+            fill: '#ffffff'
+        }
+    });
+    loadingText.setOrigin(0.5, 0.5);
+        
+    var percentText = this.make.text({
+        x: width / 2,
+        y: height / 2 - 5,
+        text: '0%',
+        style: {
+            font: '18px monospace',
+            fill: '#ffffff'
+        }
+    });
+    percentText.setOrigin(0.5, 0.5);
+            
+            
+            
+    this.load.on('progress', function (value) {
+        percentText.setText(parseInt(value * 100) + '%');
+        progressBar.clear();
+        progressBar.fillStyle(0xffffff, 1);
+        progressBar.fillRect(870, 380, 300 * value, 30);
+    });
+        
+        
+
+    this.load.on('complete', function () {
+        progressBar.destroy();
+        progressBox.destroy();
+        loadingText.destroy();
+        percentText.destroy();
+        
+    });   
+    /*#################################*/
+    
         //this.load.atlas("ninja", "images/ninja.png", "images/ninja.json");
         //let's take a look at this for ideas for animating the wuzz wuzz
         this.load.image('sky', 'images/sky.png');//from wuzz game
@@ -16,15 +67,22 @@ class SceneMain extends Phaser.Scene {
         this.load.image("hidden", "images/controls/hidden.png");
         this.load.image("controlBack", "images/controls/controlBack.png");
         this.load.image("background", "images/background.png");
+        //audio
+        this.load.audio('jump', 'sounds/jump4.mp3');
+        this.load.audio('collect', 'sounds/collect.mp3'); 
+        
         //from wuzz wuzz game
         //this.load.image('ground', 'images/platform.png');
         //this.load.image('star', 'images/fruityuity.png');
         this.load.spritesheet('dude', 'images/wuzzwuzz.png', { frameWidth: 32, frameHeight: 48 });
         //this.load.spritesheet('mushrom', 'images/dude.png', { frameWidth: 32, frameHeight: 48 });
+        
     }
     create() {
-        //let bg = this.add.image(0,0,"background").setOrigin(0,0);
-        let bg = this.add.image(0,0,"sky").setOrigin(0,0);
+        this.noLeft = false;
+        let bg = this.add.image(0,0,"background").setOrigin(0,0);
+        //let bg = "";
+        this.bg = this.add.image(0,0,"background").setOrigin(0,0);
         Align.scaleToGameW(bg,2);
 
         this.emitter=EventDispatcher.getInstance();
@@ -78,6 +136,7 @@ class SceneMain extends Phaser.Scene {
 
         this.aGrid.placeAtIndex(88, this.gamePad);
         this.setListeners();
+        
         this.cameras.main.setBounds(0,0,bg.displayWidth,bg.displayHeight);
         this.cameras.main.startFollow(this.dude);
 
@@ -109,16 +168,16 @@ class SceneMain extends Phaser.Scene {
                 //dude.flipX = true;
                 this.dude.setVelocityX(-200);
                 this.dude.anims.play('left');
-                
                 break;
             case "GO_RIGHT":
+                console.log(this.dude.x*2);
                 //dude.flipX = false;
                 this.dude.setVelocityX(200);
                 this.dude.anims.play('right');
-                
                 break;
             case "BTN1":
                 this.dude.setVelocityY(-270);
+                this.sound.play('jump'); 
                 break;
             case "BTN2":
                 this.scene.start('SceneOver');
@@ -253,7 +312,20 @@ class SceneMain extends Phaser.Scene {
         }
         return myArray;
     }
-    update() {}
+    update() {
+	    // move the player when the arrow keys are pressed
+	    if (this.dude.x > 0) {
+	      //this.dude.x -= 3;
+	      //this.dude.scaleX = 1;
+          //var noLeft = true;
+          //this.dude.setVelocityX(200);
+	
+	    } else if (this.dude.x < (bg.width*2)) {
+	      //this.dude.x += 3;
+	      //this.dude.scaleX = -1;
+	      //var noLeft = false;
+	    }
+    }
 }
 
 /*
