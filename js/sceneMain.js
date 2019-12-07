@@ -89,7 +89,6 @@ class SceneMain extends Phaser.Scene {
 
         this.brickGroup = this.physics.add.group();
         this.coinGroup = this.physics.add.group();
-        this.ladderGroup = this.physics.add.group();;
         
         this.dude = this.physics.add.sprite(200, -100, "dude");
         this.dude.setCollideWorldBounds(true);
@@ -188,32 +187,6 @@ class SceneMain extends Phaser.Scene {
         this.dude.setVelocityX(0);
         this.dude.anims.play("idle");
     }
-    
-    checkOnLadder() {
-        let onLadder = false;
-        this.ladderGroup.children.iterate(function(child) {
-            // child.alpha=.5;
-            console.log(child);
-            if (!child.body.touching.none) {
-                console.log("ON LADDER");
-                onLadder = true;
-            }
-            /*if (this.checkLadder(child) == true) {
-                onLadder = true;
-            }*/
-        }.bind(this));
-        return onLadder;
-    }
-    checkLadder(ladder) {
-        let distX = Math.abs(this.dude.x - ladder.x);
-        let distY = Math.abs(this.dude.y - ladder.y);
-        console.log(distX);
-        console.log(distY);
-        if (distX < 10 && distY < 25) {
-            return true;
-        }
-        return false;
-    }
     placeBlock(pos, key) {
         let block = this.physics.add.sprite(0, 0, key);
         //this.aGrid.placeAtIndex(pos, block);
@@ -228,67 +201,17 @@ class SceneMain extends Phaser.Scene {
         }
     }
     makeAnims() {
-       /* this.anims.create({
-            key: 'attack',
-            frames: this.makeAnim('ninja', 'Attack__00'),
-            frameRate: 8,
-            repeat: -1
-        });
-        this.anims.create({
-            key: 'jump',
-            frames: this.makeAnim('ninja', 'Jump__00'),
-            frameRate: 8,
-            repeat: -1
-        });
-        this.anims.create({
-            key: 'slide',
-            frames: this.makeAnim('ninja', 'Slide__00'),
-            frameRate: 8,
-            repeat: -1
-        });
-        this.anims.create({
-            key: 'jumpAttack',
-            frames: this.makeAnim('ninja', "Jump_Attack__00"),
-            frameRate: 8,
-            repeat: -1
-        });
-        this.anims.create({
-            key: 'jumpThrow',
-            frames: this.makeAnim('ninja', "Jump_Throw__00"),
-            frameRate: 8,
-            repeat: -1
-        });
-        this.anims.create({
-            key: 'idle',
-            frames: this.makeAnim('ninja', "Idle__00"),
-            frameRate: 8,
-            repeat: -1
-        });
-        this.anims.create({
-            key: 'dead',
-            frames: this.makeAnim('ninja', "Dead__00"),
-            frameRate: 8,
-            repeat: -1
-        });
-        this.anims.create({
-            key: 'run',
-            frames: this.makeAnim('ninja', "Run__00"),
-            frameRate: 8,
-            repeat: -1
-        });*/
         this.anims.create({
             key: 'left',
             frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
             frameRate: 10,
             repeat: -1
         });
-    
         this.anims.create({
             key: 'turn',
             frames: [ { key: 'dude', frame: 4 } ],
             frameRate: 20
         });
-    
         this.anims.create({
             key: 'right',
             frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
