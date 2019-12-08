@@ -36,17 +36,13 @@ class SceneMain extends Phaser.Scene {
         }
     });
     percentText.setOrigin(0.5, 0.5);
-            
-            
-            
+
     this.load.on('progress', function (value) {
         percentText.setText(parseInt(value * 100) + '%');
         progressBar.clear();
         progressBar.fillStyle(0xffffff, 1);
         progressBar.fillRect(870, 380, 300 * value, 30);
     });
-        
-        
 
     this.load.on('complete', function () {
         progressBar.destroy();
@@ -79,11 +75,14 @@ class SceneMain extends Phaser.Scene {
         
     }
     create() {
-        this.noLeft = false;
         let bg = this.add.image(0,0,"background").setOrigin(0,0);
-        //let bg = "";
         this.bg = this.add.image(0,0,"background").setOrigin(0,0);
+        
         Align.scaleToGameW(bg,2);
+
+        // set the boundaries of our game world
+        this.physics.world.bounds.width = bg.displayWidth;
+        this.physics.world.bounds.height = bg.displayHeight;
 
         this.emitter=EventDispatcher.getInstance();
 
@@ -164,13 +163,10 @@ class SceneMain extends Phaser.Scene {
             case "GO_DOWN":
                 break;
             case "GO_LEFT":
-                //dude.flipX = true;
                 this.dude.setVelocityX(-200);
                 this.dude.anims.play('left');
                 break;
             case "GO_RIGHT":
-                console.log(this.dude.x*2);
-                //dude.flipX = false;
                 this.dude.setVelocityX(200);
                 this.dude.anims.play('right');
                 break;
