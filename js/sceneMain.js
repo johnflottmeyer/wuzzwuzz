@@ -1,5 +1,5 @@
 /** 
-Here is where the details of the game will go  
+Here is where the details of the game will go
 **/
 class SceneMain extends Phaser.Scene {
     constructor() {
@@ -118,7 +118,7 @@ class SceneMain extends Phaser.Scene {
 
         this.dude.setGravityY(200);
         //set up platforms
-        this.makeFloor(220, 241, "brown");
+        this.makeFloor(220, 241, "grey";
         this.makeFloor(110, 114, "brown");
         this.makeFloor(55, 57, "brown");
         //this.makeFloor(22, 29, "brown");
