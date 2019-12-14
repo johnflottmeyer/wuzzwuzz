@@ -56,15 +56,17 @@ class SceneMain extends Phaser.Scene {
         //this.load.atlas("ninja", "images/ninja.png", "images/ninja.json");
         //let's take a look at this for ideas for animating the wuzz wuzz
         this.load.image('sky', 'images/sky.png');//from wuzz game
-        this.load.image("brown", "images/tiles/brickBrown.png");
-        this.load.image("grey", "images/tiles/brickGrey.png");
+        this.load.image("brown", "images/tiles/brickBrown-new.png");//should sprite these 3
+        this.load.image("brown-lower", "images/tiles/brickBrown-lower.png");
+        this.load.image("brown-lowest", "images/tiles/brickBrown-lowest.png");
+        this.load.image("grey", "images/tiles/brickGrey-test.png");
         this.load.image("cross", "images/controls/cross.png");
         this.load.image("redButton", "images/controls/redButton.png");
         this.load.image("hidden", "images/controls/hidden.png");
         this.load.image("controlBack", "images/controls/controlBack.png");
         this.load.image("background", "images/background.png");
         //audio
-        this.load.audio('jump', 'sounds/jump4.mp3');
+        this.load.audio('jump', 'sounds/386643__jalastram__sfx-jump-11.mp3');
         this.load.audio('collect', 'sounds/collect.mp3'); 
         
         //from wuzz wuzz game
@@ -118,9 +120,11 @@ class SceneMain extends Phaser.Scene {
 
         this.dude.setGravityY(200);
         //set up platforms
-        this.makeFloor(220, 241, "grey");
-        this.makeFloor(110, 114, "brown");
-        this.makeFloor(55, 57, "brown");
+        this.makeFloor(220, 241, "brown");
+        this.makeFloor(242, 263, "brown-lower");
+        this.makeFloor(264, 285, "brown-lowest");
+        this.makeFloor(110, 114, "grey");
+        this.makeFloor(55, 57, "grey");
         //this.makeFloor(22, 29, "brown");
        
         // window.scene=this;
@@ -189,7 +193,7 @@ class SceneMain extends Phaser.Scene {
         this.blockGrid.placeAtIndex(pos, block);
         this.brickGroup.add(block);
         block.setImmovable();
-        Align.scaleToGameW(block, .1);
+        Align.scaleToGameW(block, .095);//was .1
     }
     makeFloor(fromPos, toPos, key) {
         for (var i = fromPos; i < toPos + 1; i++) {
