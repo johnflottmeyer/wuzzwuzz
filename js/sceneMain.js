@@ -72,7 +72,7 @@ class SceneMain extends Phaser.Scene {
         //from wuzz wuzz game
         //this.load.image('ground', 'images/platform.png');
         //this.load.image('star', 'images/fruityuity.png');
-        this.load.spritesheet('dude', 'images/wuzzwuzz.png', { frameWidth: 32, frameHeight: 48 });
+        this.load.spritesheet('dude', 'images/wuzz-sprite.png', { frameWidth: 48, frameHeight: 54 });
         //this.load.spritesheet('mushrom', 'images/dude.png', { frameWidth: 32, frameHeight: 48 });
         
     }
@@ -93,7 +93,7 @@ class SceneMain extends Phaser.Scene {
         
         this.dude = this.physics.add.sprite(200, -100, "dude");
         this.dude.setCollideWorldBounds(true);
-        Align.scaleToGameW(this.dude, .1);
+        Align.scaleToGameW(this.dude, .15);
         //
         //
         var frameNames = this.textures.get('dude').getFrameNames();
@@ -169,10 +169,12 @@ class SceneMain extends Phaser.Scene {
             case "GO_LEFT":
                 this.dude.setVelocityX(-200);
                 this.dude.anims.play('left');
+                this.dude.flipX = true;
                 break;
             case "GO_RIGHT":
                 this.dude.setVelocityX(200);
                 this.dude.anims.play('right');
+                this.dude.flipX = false;
                 break;
             case "BTN1":
                 this.dude.setVelocityY(-270);
@@ -181,6 +183,8 @@ class SceneMain extends Phaser.Scene {
             case "BTN2":
                 this.scene.start('SceneOver');
                 break;
+            default:
+                this.dude.flipX = false;
         }
     }
     stopDude() {
@@ -203,7 +207,7 @@ class SceneMain extends Phaser.Scene {
     makeAnims() {
         this.anims.create({
             key: 'left',
-            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+            frames: this.anims.generateFrameNumbers('dude', { start: 1, end: 3 }),
             frameRate: 10,
             repeat: -1
         });
@@ -214,13 +218,13 @@ class SceneMain extends Phaser.Scene {
         });
         this.anims.create({
             key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+            frames: this.anims.generateFrameNumbers('dude', { start: 1, end: 3 }),
             frameRate: 10,
             repeat: -1
         });
         this.anims.create({
             key: 'idle',
-            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 5 }),
+            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 0 }),
             frameRate: 10,
         });
     }
