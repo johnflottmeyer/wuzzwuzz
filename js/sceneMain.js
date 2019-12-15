@@ -93,6 +93,7 @@ class SceneMain extends Phaser.Scene {
         
         this.dude = this.physics.add.sprite(200, -100, "dude");
         this.dude.setCollideWorldBounds(true);
+        this.dude.setOrigin(0,0);
         Align.scaleToGameW(this.dude, .15);
         //
         //
@@ -114,14 +115,13 @@ class SceneMain extends Phaser.Scene {
             width:bg.displayWidth
         });
         //this.blockGrid.showNumbers();
-        
-
         this.dude.setGravityY(200);
+
         //set up platforms
-        this.makeFloor(220, 241, "brown");
-        this.makeFloor(242, 263, "brown-lower");
-        this.makeFloor(264, 285, "brown-lowest");
-        this.makeFloor(110, 114, "grey");
+        this.makeFloor(352, 373, "brown");
+        this.makeFloor(374, 395, "brown-lower");
+        this.makeFloor(396, 483, "brown-lowest");
+        this.makeFloor(420, 114, "grey");
         this.makeFloor(55, 57, "grey");
         //this.makeFloor(22, 29, "brown");
        
@@ -129,12 +129,12 @@ class SceneMain extends Phaser.Scene {
         // 
         this.dude.setDepth(10000);
         this.physics.add.collider(this.dude, this.brickGroup);
-        this.gamePad = new GamePad({
+        /*this.gamePad = new GamePad({
             scene: this,
             grid: this.aGrid
-        });
+        });*/
 
-        this.aGrid.placeAtIndex(88, this.gamePad);
+        //this.aGrid.placeAtIndex(88, this.gamePad);
         this.setListeners();
         
         this.cameras.main.setBounds(0,0,bg.displayWidth,bg.displayHeight);
@@ -147,6 +147,7 @@ class SceneMain extends Phaser.Scene {
             loop: false
         })
     }
+   
     delayDone()
     {
         this.dude.body.setSize(this.dude.width,this.dude.height, true);
@@ -164,24 +165,23 @@ class SceneMain extends Phaser.Scene {
         //btn1Pressed();
         var touchX = pointer.x;
         var touchY = pointer.y;
-        var dudeY = this.dude.y;
-        var dudeX = this.dude.x;
+        var centerX = this.cameras.main.width/2;
+        var centerY = this.cameras.main.height/2;
+2
         //jump
-        if(touchY < dudeY){
+        if(touchY < centerY){
             this.emitter.emit("CONTROL_PRESSED","BTN1");
-            console.log("jump");
-        }else{
-            console.log("don't jump");
+            //console.log("Y: " + touchY+ " : " + centerY);
         }
-        if(touchX > dudeX){
-            console.log('move right');
+        if(touchX > centerX){
+            //console.log('move right');
             this.emitter.emit("CONTROL_PRESSED","GO_RIGHT");
         }
-        if(touchX < dudeX){
-            console.log("move left");
+        if(touchX < centerX){
+            //console.log("move left");
             this.emitter.emit("CONTROL_PRESSED","GO_LEFT");
         }
-        console.log(touchX);
+        //console.log(touchX);
         //controlPressed(param)
         
     }
@@ -271,17 +271,7 @@ class SceneMain extends Phaser.Scene {
         // touch controls 
         // check for pointer down
 
-	    if (this.dude.x > 0) {
-	      //this.dude.x -= 3;
-	      //this.dude.scaleX = 1;
-          //var noLeft = true;
-          //this.dude.setVelocityX(200);
-	
-	    } else if (this.dude.x < (bg.width*2)) {
-	      //this.dude.x += 3;
-	      //this.dude.scaleX = -1;
-	      //var noLeft = false;
-	    }
+	    
     }
 }
 

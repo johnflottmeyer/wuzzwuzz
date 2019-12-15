@@ -40,6 +40,7 @@ class GamePad extends UIBlock {
         this.btnLeft.setInteractive();
         this.btnRight.setInteractive();
         this.btn1.setInteractive();
+        this.dude.setInteractive();
         this.btn2.setInteractive();
         //
         //
@@ -48,7 +49,8 @@ class GamePad extends UIBlock {
         this.btnDown.on('pointerdown', this.goDown.bind(this));
         this.btnLeft.on('pointerdown', this.goLeft.bind(this));
         this.btnRight.on('pointerdown', this.goRight.bind(this));
-        this.btn1.on('pointerdown', this.btn1Pressed.bind(this));
+        this.dude.on('pointerdown', this.btn1Pressed.bind(this));
+        //this.btn1.on('pointerdown', this.btn1Pressed.bind(this));
         this.btn2.on('pointerdown', this.btn2Pressed.bind(this));
         //
         //
