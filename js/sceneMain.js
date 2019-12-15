@@ -97,9 +97,7 @@ class SceneMain extends Phaser.Scene {
         //
         //
         var frameNames = this.textures.get('dude').getFrameNames();
-        console.log(frameNames);
         this.makeAnims();
-        //this.ninja.play("idle");
         window.dude = this.dude;
         this.aGrid = new AlignGrid({
             scene: this,
@@ -157,6 +155,35 @@ class SceneMain extends Phaser.Scene {
     {
         this.emitter.on('CONTROL_PRESSED',this.controlPressed.bind(this));
         this.input.on('pointerup',this.stopDude.bind(this));
+        this.input.on('pointerdown',this.itemTouched.bind(this));
+    }
+
+    itemTouched(pointer) {
+        // do something
+        
+        //btn1Pressed();
+        var touchX = pointer.x;
+        var touchY = pointer.y;
+        var dudeY = this.dude.y;
+        var dudeX = this.dude.x;
+        //jump
+        if(touchY < dudeY){
+            this.emitter.emit("CONTROL_PRESSED","BTN1");
+            console.log("jump");
+        }else{
+            console.log("don't jump");
+        }
+        if(touchX > dudeX){
+            console.log('move right');
+            this.emitter.emit("CONTROL_PRESSED","GO_RIGHT");
+        }
+        if(touchX < dudeX){
+            console.log("move left");
+            this.emitter.emit("CONTROL_PRESSED","GO_LEFT");
+        }
+        console.log(touchX);
+        //controlPressed(param)
+        
     }
     controlPressed(param)
     {
@@ -240,7 +267,10 @@ class SceneMain extends Phaser.Scene {
         return myArray;
     }
     update() {
-	    // move the player when the arrow keys are pressed
+        // move the player when the arrow keys are pressed
+        // touch controls 
+        // check for pointer down
+
 	    if (this.dude.x > 0) {
 	      //this.dude.x -= 3;
 	      //this.dude.scaleX = 1;
