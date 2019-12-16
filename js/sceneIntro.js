@@ -1,30 +1,68 @@
-class SceneOver extends Phaser.Scene {
+class SceneIntro extends Phaser.Scene {
     constructor(){
         super('SceneIntro');
     }
     preload(){
-        this.load.image('sky', 'images/sky.png');//from wuzz game
+        //this.load.image('sky', 'images/background.png');//from wuzz game
     }
     create(){
-        console.log("Game Over!");
-        let bg = this.add.image(0,0,"sky").setOrigin(0,0);
-        Align.scaleToGameW(bg,2);
+        console.log("Intro Movie");
+        //let bg = this.add.image(0,0,"sky").setOrigin(0,0);
+        //Align.scaleToGameW(bg,2);
 
         this.aGrid = new AlignGrid({
             scene: this,
             rows: 11,
             cols: 11
         });
-        //this.aGrid.showNumbers();
+        var HomeScreen = this.add.graphics();
+        var HomeScreen = this.add.graphics();
+        HomeScreen.fillStyle(0xEBEBEB, 0.8);
+        HomeScreen.fillRect(860, 370, 320, 50);
 
-        var gameOverText=this.add.text(0,0,"Game Over",{color:'#fffff',fontSize:game.config.width/10});
-        gameOverText.setOrigin(0.5,0.5);
-        this.aGrid.placeAtIndex(27,gameOverText);
-        //add some background images here. 
+        var width = this.cameras.main.width;
+        var height = this.cameras.main.height;
+        var loadingText = this.make.text({
+            x: width / 2,
+            y: height / 2 - 50,
+            padding: {
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 20
+            },
+            text: 'Intro story for wuzz wuzz',
+            style: {
+                fontSize: '20px',
+                fontFamily: 'Arial',
+                color: '#ffffff',
+                align: 'center', 
+                backgroundColor: '#000000'
+                //fontSize:game.config.width/10,
+            }
+        });
+        loadingText.setOrigin(0.5, 0.5);
 
-        var playAgainText=this.add.text(0,0,"Play Again!",{color:'#fffff',fontSize:game.config.width/10});
+        var playAgainText = this.make.text({
+            x: width / 2,
+            y: height / 2 + 150,
+            padding: {
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 20
+            },
+            text: "Skip Intro",
+            style: {
+                fontSize: '20px',
+                fontFamily: 'Arial',
+                color: '#ffffff',
+                align: 'center', 
+                backgroundColor: '#ff00ff'
+                //fontSize:game.config.width/10,
+            }
+        });
         playAgainText.setOrigin(0.5,0.5);
-        this.aGrid.placeAtIndex(82,playAgainText);
 
         playAgainText.setInteractive();
         playAgainText.on("pointerdown",this.playAgain,this);

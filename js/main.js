@@ -18,7 +18,7 @@ window.onload = function() {
         width: w,
         height: h,
         parent: 'phaser-game',
-        scene: [SceneMain,SceneOver],
+        scene: [SceneStart,SceneIntro,SceneMain,SceneOver],
         physics: {
             default: 'arcade',
             arcade: {

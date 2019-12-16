@@ -59,6 +59,7 @@ class SceneMain extends Phaser.Scene {
         this.load.image("brown", "images/tiles/brickBrown-new.png");//should sprite these 3
         this.load.image("brown-lower", "images/tiles/brickBrown-lower.png");
         this.load.image("brown-lowest", "images/tiles/brickBrown-lowest.png");
+        this.load.image("brown-lowest", "images/tiles/trees.png", { frameWidth: 126, frameHeight: 54 });
         this.load.image("grey", "images/tiles/brickGrey-test.png");
         this.load.image("cross", "images/controls/cross.png");
         this.load.image("redButton", "images/controls/redButton.png");
@@ -121,11 +122,10 @@ class SceneMain extends Phaser.Scene {
         this.makeFloor(352, 373, "brown");
         this.makeFloor(374, 395, "brown-lower");
         this.makeFloor(396, 483, "brown-lowest");
+        //set up some things to jump into 
         this.makeFloor(420, 114, "grey");
         this.makeFloor(55, 57, "grey");
         //this.makeFloor(22, 29, "brown");
-       
-        // window.scene=this;
         // 
         this.dude.setDepth(10000);
         this.physics.add.collider(this.dude, this.brickGroup);
@@ -150,6 +150,7 @@ class SceneMain extends Phaser.Scene {
    
     delayDone()
     {
+        //this fixes the bounding box issue
         this.dude.body.setSize(this.dude.width,this.dude.height, true);
     }
     setListeners()
@@ -161,29 +162,23 @@ class SceneMain extends Phaser.Scene {
 
     itemTouched(pointer) {
         // do something
-        
         //btn1Pressed();
         var touchX = pointer.x;
         var touchY = pointer.y;
         var centerX = this.cameras.main.width/2;
         var centerY = this.cameras.main.height/2;
-2
+
         //jump
         if(touchY < centerY){
             this.emitter.emit("CONTROL_PRESSED","BTN1");
-            //console.log("Y: " + touchY+ " : " + centerY);
         }
+        //left and right
         if(touchX > centerX){
-            //console.log('move right');
             this.emitter.emit("CONTROL_PRESSED","GO_RIGHT");
         }
         if(touchX < centerX){
-            //console.log("move left");
             this.emitter.emit("CONTROL_PRESSED","GO_LEFT");
         }
-        //console.log(touchX);
-        //controlPressed(param)
-        
     }
     controlPressed(param)
     {
