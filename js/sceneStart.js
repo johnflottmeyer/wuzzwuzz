@@ -63,7 +63,7 @@ class SceneStart extends Phaser.Scene {
                 fontFamily: 'Arial',
                 color: '#ffffff',
                 align: 'center', 
-                backgroundColor: '#ff00ff'
+                backgroundColor: '#6686d8'
                 //fontSize:game.config.width/10,
             }
         });
