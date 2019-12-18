@@ -124,6 +124,9 @@ class SceneIntro extends Phaser.Scene {
         this.sys.game.loadingText.setOrigin(0.5, 0.5);
         this.sys.game.loadingText.depth = 100;
     }
+
+
+    
     update(){
 
     }

@@ -78,6 +78,8 @@ class SceneMain extends Phaser.Scene {
         
     }
     create() {
+        this.power = 0;
+
         let bg = this.add.image(0,0,"background").setOrigin(0,0);
         this.bg = this.add.image(0,0,"background").setOrigin(0,0);
         
@@ -116,25 +118,22 @@ class SceneMain extends Phaser.Scene {
             width:bg.displayWidth
         });
         //this.blockGrid.showNumbers();
-        this.dude.setGravityY(200);
+
+        this.dude.body.setGravityY(200);
+        this.dude.setActive(true);
 
         //set up platforms
         this.makeFloor(352, 373, "brown");
         this.makeFloor(374, 395, "brown-lower");
         this.makeFloor(396, 483, "brown-lowest");
         //set up some things to jump into 
-        this.makeFloor(420, 114, "grey");
-        this.makeFloor(55, 57, "grey");
+        this.makeFloor(264, 268, "grey");
+        this.makeFloor(205, 209, "grey");
         //this.makeFloor(22, 29, "brown");
         // 
         this.dude.setDepth(10000);
         this.physics.add.collider(this.dude, this.brickGroup);
-        /*this.gamePad = new GamePad({
-            scene: this,
-            grid: this.aGrid
-        });*/
 
-        //this.aGrid.placeAtIndex(88, this.gamePad);
         this.setListeners();
         
         this.cameras.main.setBounds(0,0,bg.displayWidth,bg.displayHeight);
@@ -156,27 +155,28 @@ class SceneMain extends Phaser.Scene {
     setListeners()
     {
         this.emitter.on('CONTROL_PRESSED',this.controlPressed.bind(this));
+
         this.input.on('pointerup',this.stopDude.bind(this));
         this.input.on('pointerdown',this.itemTouched.bind(this));
     }
 
     itemTouched(pointer) {
-        // do something
-        //btn1Pressed();
         var touchX = pointer.x;
         var touchY = pointer.y;
         var centerX = this.cameras.main.width/2;
         var centerY = this.cameras.main.height/2;
 
-        //jump
-        if(touchY < centerY){
+        if((touchY < centerY) && this.sys.game.standing == true){
             this.emitter.emit("CONTROL_PRESSED","BTN1");
+            console.log("jump!");
         }
         //left and right
         if(touchX > centerX){
+            console.log(this.sys.game.standing);
             this.emitter.emit("CONTROL_PRESSED","GO_RIGHT");
         }
         if(touchX < centerX){
+            console.log(this.sys.game.standing);
             this.emitter.emit("CONTROL_PRESSED","GO_LEFT");
         }
     }
@@ -215,7 +215,6 @@ class SceneMain extends Phaser.Scene {
     }
     placeBlock(pos, key) {
         let block = this.physics.add.sprite(0, 0, key);
-        //this.aGrid.placeAtIndex(pos, block);
         this.blockGrid.placeAtIndex(pos, block);
         this.brickGroup.add(block);
         block.setImmovable();
@@ -250,6 +249,7 @@ class SceneMain extends Phaser.Scene {
             frameRate: 10,
         });
     }
+ 
     makeAnim(key, frameName) {
         let myArray = [];
         for (var i = 0; i < 8; i++) {
@@ -261,12 +261,10 @@ class SceneMain extends Phaser.Scene {
         }
         return myArray;
     }
+   
     update() {
-        // move the player when the arrow keys are pressed
-        // touch controls 
-        // check for pointer down
-
-	    
+        //limit jumps - you should really only be able to jump if the character is in contact with the floor.
+        game.standing = this.dude.body.blocked.down || this.dude.body.touching.down;	    
     }
 }
 
