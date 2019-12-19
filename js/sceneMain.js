@@ -59,7 +59,8 @@ class SceneMain extends Phaser.Scene {
         this.load.image("brown", "images/tiles/brickBrown-new.png");//should sprite these 3
         this.load.image("brown-lower", "images/tiles/brickBrown-lower.png");
         this.load.image("brown-lowest", "images/tiles/brickBrown-lowest.png");
-        this.load.image("brown-lowest", "images/tiles/trees.png", { frameWidth: 126, frameHeight: 54 });
+        //this.load.image("brown-lowest", "images/tiles/trees.png", { frameWidth: 126, frameHeight: 54 });
+        this.load.image("tree", "images/trees.png", { frameWidth: 36, frameHeight: 74 });
         this.load.image("grey", "images/tiles/brickGrey-test.png");
         this.load.image("cross", "images/controls/cross.png");
         this.load.image("redButton", "images/controls/redButton.png");
@@ -84,6 +85,11 @@ class SceneMain extends Phaser.Scene {
         this.bg = this.add.image(0,0,"background").setOrigin(0,0);
         
         Align.scaleToGameW(bg,2);
+        //top bar
+        var BottomText = this.add.graphics();
+        BottomText.fillStyle(0x000000, 0.5);
+        BottomText.fillRect(0, 0, this.cameras.main.width, 30);
+        BottomText.depth = 100;
 
         // set the boundaries of our game world
         this.physics.world.bounds.width = bg.displayWidth;
@@ -92,7 +98,8 @@ class SceneMain extends Phaser.Scene {
         this.emitter=EventDispatcher.getInstance();
 
         this.brickGroup = this.physics.add.group();
-        this.coinGroup = this.physics.add.group();
+        this.treeGroup = this.physics.add.group();
+        //this.coinGroup = this.physics.add.group();
         
         this.dude = this.physics.add.sprite(200, -100, "dude");
         this.dude.setCollideWorldBounds(true);
@@ -130,6 +137,7 @@ class SceneMain extends Phaser.Scene {
         this.makeFloor(264, 268, "grey");
         this.makeFloor(205, 209, "grey");
         //this.makeFloor(22, 29, "brown");
+        this.makeForest(347,351, "tree");
         // 
         this.dude.setDepth(10000);
         this.physics.add.collider(this.dude, this.brickGroup);
@@ -163,19 +171,27 @@ class SceneMain extends Phaser.Scene {
     itemTouched(pointer) {
         var touchX = pointer.x;
         var touchY = pointer.y;
-        var centerX = this.cameras.main.width/2;
+        var leftedgeX = this.cameras.main.width/3;
+        var rightedgeX = this.cameras.main.width-leftedgeX;
         var centerY = this.cameras.main.height/2;
-
-        if((touchY < centerY) && this.sys.game.standing == true){
+        if((touchY < centerY) && this.sys.game.jumps > 0){
             this.emitter.emit("CONTROL_PRESSED","BTN1");
-            console.log("jump!");
+            if(touchX > rightedgeX){
+                this.emitter.emit("CONTROL_PRESSED","JUMP_RIGHT");
+            }
+            if(touchX < leftedgeX){
+                this.emitter.emit("CONTROL_PRESSED","JUMP_LEFT");
+            }
+            if(touchX < rightedgeX && touchX > leftedgeX ){
+                this.emitter.emit("CONTROL_PRESSED","JUMP_UP");
+            }
         }
         //left and right
-        if(touchX > centerX){
+        if(touchX > rightedgeX){
             console.log(this.sys.game.standing);
             this.emitter.emit("CONTROL_PRESSED","GO_RIGHT");
         }
-        if(touchX < centerX){
+        if(touchX < leftedgeX){
             console.log(this.sys.game.standing);
             this.emitter.emit("CONTROL_PRESSED","GO_LEFT");
         }
@@ -198,9 +214,25 @@ class SceneMain extends Phaser.Scene {
                 this.dude.anims.play('right');
                 this.dude.flipX = false;
                 break;
-            case "BTN1":
+            case "JUMP_LEFT":
+                this.dude.setVelocityY(-270);
+                this.dude.setVelocityX(-200);
+                this.sound.play('jump'); 
+                this.sys.game.jumping = true;
+                console.log("jump left");
+                break;
+            case "JUMP_RIGHT":
+                this.dude.setVelocityY(-270);
+                this.dude.setVelocityX(200);
+                this.sound.play('jump'); 
+                this.sys.game.jumping = true;
+                console.log("jump right");
+                break;
+            case "JUMP_UP":
                 this.dude.setVelocityY(-270);
                 this.sound.play('jump'); 
+                this.sys.game.jumping = true;
+                console.log("jump up");
                 break;
             case "BTN2":
                 this.scene.start('SceneOver');
@@ -212,6 +244,8 @@ class SceneMain extends Phaser.Scene {
     stopDude() {
         this.dude.setVelocityX(0);
         this.dude.anims.play("idle");
+        this.sys.game.jumps--;
+        this.sys.game.jumping = false;
     }
     placeBlock(pos, key) {
         let block = this.physics.add.sprite(0, 0, key);
@@ -225,6 +259,19 @@ class SceneMain extends Phaser.Scene {
             this.placeBlock(i, key);
         }
     }
+    placeTree(pos, key) {
+        let tree= this.physics.add.sprite(0, 0, key);
+        this.blockGrid.placeAtIndex(pos, tree);
+        this.treeGroup.add(tree);
+        tree.setImmovable();
+        Align.scaleToGameW(tree, 1);//was .1
+    }
+    makeForest(fromPos, toPos, key) {
+        for (var i = fromPos; i < toPos + 1; i++) {
+            this.placeTree(i, key);
+        }
+    }
+
     makeAnims() {
         this.anims.create({
             key: 'left',
@@ -264,7 +311,12 @@ class SceneMain extends Phaser.Scene {
    
     update() {
         //limit jumps - you should really only be able to jump if the character is in contact with the floor.
-        game.standing = this.dude.body.blocked.down || this.dude.body.touching.down;	    
+        game.standing = this.dude.body.blocked.down || this.dude.body.touching.down;
+        //double jumps
+        if (this.sys.game.standing) {
+            game.jumps = 2;
+            game.jumping = false;
+        }	    
     }
 }
 
