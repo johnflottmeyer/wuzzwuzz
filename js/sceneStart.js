@@ -3,12 +3,13 @@ class SceneStart extends Phaser.Scene {
         super('SceneStart');
     }
     preload(){
-        this.load.image('sky', 'images/background.png');//from wuzz game
+        this.load.image('sky', 'images/splash/splash-screen.png');//from wuzz game
     }
     create(){
         console.log("Wuzz wuzz welcome");
         let bg = this.add.image(0,0,"sky").setOrigin(0,0);
-        //Align.scaleToGameW(bg,2);
+
+        Align.scaleToGameW(bg,1);
 
         this.aGrid = new AlignGrid({
             scene: this,
@@ -25,8 +26,8 @@ class SceneStart extends Phaser.Scene {
         var height = this.cameras.main.height;
         var loadingText = this.make.text({
             x: width / 2,
-            y: height / 2 - 50,
-            text: 'Wuzz Wuzz welcome, and logo',
+            y: height - 50,
+            text: 'Character design and story by Cameron and Finley Flottmeyer.',
             padding: {
                 left: 20,
                 right: 20,
@@ -34,10 +35,11 @@ class SceneStart extends Phaser.Scene {
                 bottom: 20
             },
             style: {
-                fontSize: '20px',
+                fontSize: '14px',
                 fontFamily: 'Arial',
                 fill: '#FFFFFF',
-                backgroundColor: '#000000'
+                backgroundColor: '#000000',
+                border: '1px solid #000'
             },
             wordWrap: {
                 width: 200,
