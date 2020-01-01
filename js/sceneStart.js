@@ -29,8 +29,8 @@ class SceneStart extends Phaser.Scene {
             y: height - 50,
             text: 'Character design and story by Cameron and Finley Flottmeyer.',
             padding: {
-                left: 20,
-                right: 20,
+                left: 120,
+                right: 120,
                 top: 20,
                 bottom: 20
             },
@@ -42,7 +42,7 @@ class SceneStart extends Phaser.Scene {
                 border: '1px solid #000'
             },
             wordWrap: {
-                width: 200,
+                width: width,
                 callback: null,
                 callbackScope: null,
                 useAdvancedWrap: false
