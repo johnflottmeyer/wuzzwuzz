@@ -37,6 +37,7 @@ class SceneStart extends Phaser.Scene {
             style: {
                 fontSize: '14px',
                 fontFamily: 'Arial',
+                fontFamily: 'Press Start 2P',
                 fill: '#FFFFFF',
                 backgroundColor: '#000000',
                 border: '1px solid #000'

@@ -4,13 +4,14 @@ class SceneIntro extends Phaser.Scene {
         super('SceneIntro');
     }
     preload(){
-        this.load.image('intro0', 'images/intro1.png');//from wuzz game
+        this.load.image('intro0', 'images/splash/screen-1.png');//from wuzz game
         this.load.image('intro1', 'images/intro2.png');//from wuzz game
         this.load.image('intro2', 'images/intro3.png');//from wuzz game
     }
     create(){
         console.log("Intro Movie");
         let bg = this.add.image(0,0,"intro0").setOrigin(0,0);
+        Align.scaleToGameW(bg,1);
         var width = this.cameras.main.width;
 
         //global game variables
