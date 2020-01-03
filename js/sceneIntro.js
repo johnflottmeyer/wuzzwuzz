@@ -26,7 +26,7 @@ class SceneIntro extends Phaser.Scene {
         });
 
         var BottomText = this.add.graphics();
-        BottomText.fillStyle(0x000000, 0.8);
+        BottomText.fillStyle(0x000000, 0.3);
         BottomText.fillRect(0, this.cameras.main.height-230, this.cameras.main.width, 280);
         BottomText.depth = 100;
 
