@@ -48,7 +48,7 @@ class SceneIntro extends Phaser.Scene {
                 fontFamily: 'Arial',
                 color: '#ffffff',
                 align: 'center', 
-                backgroundColor: '#ff00ff'
+                backgroundColor: '#6686d8'
             }
         });
         game.NextText.setOrigin(0.5,0.5);
@@ -92,7 +92,7 @@ class SceneIntro extends Phaser.Scene {
                 fontFamily: 'Arial',
                 color: '#ffffff',
                 align: 'center', 
-                backgroundColor: '#f60029'
+                backgroundColor: '#6686d8'
                 //fontSize:game.config.width/10,
             }
         });

@@ -9,7 +9,8 @@ class SceneStart extends Phaser.Scene {
     create(){
         console.log("Wuzz wuzz welcome");
         let bg = this.add.image(0,0,"sky").setOrigin(0,0);
-        let button = this.add.image(this.cameras.main.width/2-120,this.cameras.main.height/2+115,"button").setOrigin(0,0);
+       
+        let button = this.add.image(this.cameras.main.width/2-this.cameras.main.width/4,this.cameras.main.height/2+115,"button").setOrigin(0,0);
         Align.scaleToGameW(button,.5);
         Align.scaleToGameW(bg,1);
 
