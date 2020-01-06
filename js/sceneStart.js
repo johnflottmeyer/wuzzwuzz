@@ -65,7 +65,7 @@ class SceneStart extends Phaser.Scene {
             },
             text: "Start Game",
             style: {
-                fontSize: '30px',
+                fontSize: '18px',
                 fontFamily: 'Arial',
                 color: '#000000',
                 align: 'center', 
